@@ -25,6 +25,8 @@ def vprint(*args):
 
 
 def send(sc, msg):
+    if not CONFIG["formatted"]:
+        msg = "```%s```" % msg
     vprint("Sending request:\n%s\n" % pprint.pformat(sc.api_call(
         "chat.postMessage", channel="#%s" % CONFIG["channel"], text=msg,
         username=CONFIG["username"], icon_emoji=CONFIG["emoji"]
@@ -46,6 +48,8 @@ def start():
     parser.add_argument("-c", "--channel", help="")
     parser.add_argument("-u", "--username", help="")
     # parser.add_argument("-f", "--file", help="") TODO
+    parser.add_argument("--formatted", help="", action="store_true")
+    parser.add_argument("--live", help="", action="store_true")
     parser.add_argument("-v", "--verbose",
                         help="increase output verbosity", action="store_true")
     parser.add_argument("message", help="", nargs='?')
@@ -64,16 +68,30 @@ def start():
 
     # Initialize session
     sc = SlackClient(CONFIG["token"])
+    auth_test = sc.api_call("auth.test")
+    if not auth_test["ok"]:
+        print "Slack API error: %s" % auth_test["error"]
+        sys.exit(-1)
+    vprint(pprint.pformat(auth_test))
 
     # If the message was provided, send it
     if message is not None:
         send(sc, message)
 
-    # Otherwise, wait for stdin
+    # Otherwise, read from stdin
     else:
-        for line in sys.stdin:
-            sys.stdout.write(line)
-            send(sc, line)
+        # Print each line if reading "live"
+        if CONFIG["live"]:
+            for line in sys.stdin:
+                sys.stdout.write(line)
+                send(sc, line)
+        # Otherwise, buffer until end of stdin
+        else:
+            message = ""
+            for line in sys.stdin:
+                sys.stdout.write(line)
+                message += line
+            send(sc, message)
 
 if __name__ == "__main__":
     try:
