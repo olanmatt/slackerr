@@ -44,12 +44,12 @@ def start():
         sys.exit(e.errno)
 
     # Setup argument parsing
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--channel", help="")
-    parser.add_argument("-u", "--username", help="")
+    parser = argparse.ArgumentParser(description="Pipe directly to Slack from your shell")
+    parser.add_argument("-c", "--channel", help="specify the channel to send to")
+    parser.add_argument("-u", "--username", help="specify the username to send as")
     # parser.add_argument("-f", "--file", help="") TODO
-    parser.add_argument("--formatted", help="", action="store_true")
-    parser.add_argument("--live", help="", action="store_true")
+    parser.add_argument("--formatted", help="assume message is preformatted", action="store_true")
+    parser.add_argument("--live", help="actively send from stdin", action="store_true")
     parser.add_argument("-v", "--verbose",
                         help="increase output verbosity", action="store_true")
     parser.add_argument("message", help="", nargs='?')
@@ -82,7 +82,10 @@ def start():
     else:
         # Print each line if reading "live"
         if CONFIG["live"]:
-            for line in sys.stdin:
+            while True:
+                line = sys.stdin.readline()
+                if not line:
+                    break
                 sys.stdout.write(line)
                 send(sc, line)
         # Otherwise, buffer until end of stdin
