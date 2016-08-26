@@ -1,4 +1,7 @@
 # slackerr
+
+[![Build Status](https://travis-ci.org/olanmatt/slackerr.svg)](https://travis-ci.org/olanmatt/slackerr)
+
 Pipe directly to Slack from your shell
 
 ![demo](http://i.imgur.com/HBFTRcA.gif)
