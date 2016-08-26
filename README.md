@@ -4,7 +4,11 @@ Pipe directly to Slack from your shell
 ![demo](http://i.imgur.com/HBFTRcA.gif)
 
 ## Setup
-This package depends on [slackhq/python-slackclient](https://github.com/slackhq/python-slackclient).
+
+Install with pip:
+```sh
+pip install --upgrade git+https://github.com/olanmatt/slackerr.git
+```
 
 You must generate a [Slack OAuth token](https://api.slack.com/docs/oauth-test-tokens). This token can be passed as an argument (see below).
 

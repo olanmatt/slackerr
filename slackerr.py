@@ -83,9 +83,8 @@ def slackerr():
         config_filename = "%s/.slackerr" % os.path.expanduser("~")
         with open(config_filename) as config_file:
             CONFIG.update(json.load(config_file))
-    except IOError as e:
-        print "Error reading %s: %s" % (config_filename, e.strerror)
-        sys.exit(e.errno)
+    except:
+        pass
 
     # Setup argument parsing
     parser = argparse.ArgumentParser(
@@ -117,8 +116,8 @@ def slackerr():
     vprint("Configuration settings:\n%s\n" % pprint.pformat(CONFIG))
 
     # Ensure a token was provided
-    if CONFIG["token"] is None:
-        print "Slack API token is missing from config"
+    if "token" not in CONFIG or CONFIG["token"] is None:
+        print "No Slack API token has been provided"
         sys.exit(-1)
 
     # Initialize session
