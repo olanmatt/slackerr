@@ -1,5 +1,16 @@
+sudo: false
+
 language: python
+
+python:
+  - 2.7
+
 install:
-    pip install --upgrade .
+  - pip install .
+  - pip install codecov
+
 script:
-    exit 0 # TODO: tests
+  - coverage run tests.py
+
+after_success:
+  - codecov
