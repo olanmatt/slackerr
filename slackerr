@@ -110,7 +110,7 @@ def slackerr():
     # Parse command line arguments
     args = vars(parser.parse_args())
     message = args.pop("message")
-    filename = args.pop("file")
+    #filename = args.pop("file")
 
     # Update configuration and dump
     CONFIG.update({k: v for (k, v) in args.items() if v is not None})
@@ -132,11 +132,13 @@ def slackerr():
     vprint(pprint.pformat(auth_test))
 
     # If a file was provided, send it
+    '''
     if filename is not None:
         send_file(sc, filename, message)
+    '''
 
     # If a message was provided, send it
-    elif message is not None:
+    if message is not None:
         send_text(sc, message)
 
     # Otherwise, read from stdin

@@ -27,8 +27,6 @@ For example:
 slackerr [options] [message]
 ```
 
-Pipe directly to Slack from your shell
-
 ### Options
 ```
   -h, --help            show this help message and exit
